@@ -1,0 +1,30 @@
+version: "3"
+services:
+  mysql:
+    image: mysql:latest
+    container_name: mysql
+    networks:
+      - shared
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: my_first_db
+      MYSQL_USER: user1
+      MYSQL_PASSWORD: pwd
+    volumes:
+      - ./sql:/docker-entrypoint-initdb.d/
+    ports:
+      - "3306:3306"
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin
+    environment:
+      PMA_HOST: mysql
+    ports:
+      - "8081:80"
+    depends_on:
+      - mysql
+    networks:
+      - shared
+networks:
+  shared:
+    external: true
